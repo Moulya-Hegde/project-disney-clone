@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   selectUserName,
-  selectUserEmail,
   selectUserPhoto,
   setUserLoginDetails,
   setSignOutState,
@@ -16,7 +15,6 @@ const Header = (props) => {
   const navigate = useNavigate();
   const username = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
-  console.log("User Photo from Redux:", userPhoto);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
