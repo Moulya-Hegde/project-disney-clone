@@ -1,27 +1,27 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectTrending, setMovies } from "../features/movie/movieSlice";
+import { selectTrending } from "../features/movie/movieSlice";
+
 const Trending = (props) => {
-  const movies=useSelector(selectTrending)
+  const movies = useSelector(selectTrending);
+  const navigate = useNavigate();
+
   return (
     <Container>
       <h4>Trending</h4>
       <Content>
-        {
-          movies && movies.map((movie,key)=>(
-            <Wrap key={key}>
-              {movie.id}
-              <Link to={'/detail/'+movie.id}>
+        {movies &&
+          movies.map((movie, key) => (
+            <Wrap key={key} onClick={() => navigate(`/detail/${movie.id}`)}>
               <img src={movie.cardImg} alt={movie.title} />
-              </Link>
             </Wrap>
-          ))
-        }
+          ))}
       </Content>
     </Container>
   );
 };
+
 const Container = styled.div`
   font-family: "Parkinsans", sans-serif;
   font-optical-sizing: auto;

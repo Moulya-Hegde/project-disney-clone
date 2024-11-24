@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useEffect } from "react";
 import { auth, provider } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   selectUserName,
   selectUserPhoto,
@@ -10,25 +10,32 @@ import {
   setSignOutState,
 } from "../features/user/userSlice";
 
-const Header = (props) => {
+const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Get current location
   const username = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
-        navigate("/home");
+
+        // Only navigate to "/home" if the user is on the root page
+        if (location.pathname === "/") {
+          navigate("/home");
+        }
       } else {
-        console.log("No user signed in.");
-        navigate('/');
+        // Redirect to root if user is signed out and not already there
+        if (location.pathname !== "/") {
+          navigate("/");
+        }
       }
     });
-  
-    return () => unsubscribe(); // Cleanup on unmount
-  }, [navigate]); // Only trigger when navigate changes (it's stable)
-  
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [username, navigate, location.pathname]);
 
   const handleAuth = () => {
     if (!username) {
@@ -54,7 +61,6 @@ const Header = (props) => {
   };
 
   const setUser = (user) => {
-    console.log("Redux User Photo:", user.photoURL);
     dispatch(
       setUserLoginDetails({
         name: user.displayName,

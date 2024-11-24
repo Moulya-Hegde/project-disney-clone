@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import db from "../firebase";
 
 const Details = (props) => {
-  const { id } = String(useParams());
+  const { id } = useParams();
   console.log(id)
   const [detailData, setDetailData] = useState({});
   useEffect(() => {
@@ -163,6 +163,9 @@ const Trailer = styled(Player)`
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgb(249, 249, 249);
   color: rgb(249, 249, 249);
+  &:hover{
+    background-color: #2f3030;
+  }
 `;
 const AddList = styled.div`
   margin-right: 16px;
